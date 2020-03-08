@@ -9,6 +9,22 @@ let where: WhereOptions;
 
 // From https://sequelize.org/master/en/v4/docs/querying/
 
+/**
+ * Literal values
+ * @see WhereValue
+ */
+where = {
+  string: 'foo',
+  strings: ['foo'],
+  number: 1,
+  numbers: [1],
+  boolean: true,
+  buffer: Buffer.alloc(0),
+  buffers: [Buffer.alloc(0)],
+  null: null,
+  date: new Date()
+};
+
 // Operators
 
 const and: AndOperator = {
@@ -113,6 +129,12 @@ where = {
                 url: 'http://google.com',
             },
         },
+    },
+    meta2: {
+      [Op.contains]: ['stringValue1', 'stringValue2', 'stringValue3']
+    },
+    meta3: {
+      [Op.contains]: [1, 2, 3, 4]
     },
 };
 
@@ -303,3 +325,13 @@ Sequelize.where(
         [Op.notILike]: Sequelize.literal('LIT')
     }
 )
+
+Sequelize.where(Sequelize.col("ABS"), Op.is, null);
+
+Sequelize.where(
+  Sequelize.fn("ABS", Sequelize.col("age")),
+  Op.like,
+  Sequelize.fn("ABS", Sequelize.col("age"))
+);
+
+Sequelize.where(Sequelize.col("ABS"), null);

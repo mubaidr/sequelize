@@ -2,6 +2,7 @@ import {
   BulkCreateOptions,
   CreateOptions,
   Filterable,
+  FindAttributeOptions,
   FindOptions,
   InstanceDestroyOptions,
   InstanceUpdateOptions,
@@ -64,6 +65,18 @@ export interface BelongsToManyOptions extends ManyToManyOptions {
   otherKey?: string | ForeignKeyOptions;
 
   /**
+   * The name of the field to use as the key for the association in the source table. Defaults to the primary
+   * key of the source table
+   */
+  sourceKey?: string;
+
+  /**
+   * The name of the field to use as the key for the association in the target table. Defaults to the primary
+   * key of the target table
+   */
+  targetKey?: string;
+
+  /**
    * Should the join model have timestamps
    */
   timestamps?: boolean;
@@ -76,6 +89,8 @@ export interface BelongsToManyOptions extends ManyToManyOptions {
 
 export class BelongsToMany<S extends Model = Model, T extends Model = Model> extends Association<S, T> {
   public otherKey: string;
+  public sourceKey: string;
+  public targetKey: string;
   public accessors: MultiAssociationAccessors;
   constructor(source: ModelCtor<S>, target: ModelCtor<T>, options: BelongsToManyOptions);
 }
@@ -85,6 +100,10 @@ export class BelongsToMany<S extends Model = Model, T extends Model = Model> ext
  * @see BelongsToManyGetAssociationsMixin
  */
 export interface BelongsToManyGetAssociationsMixinOptions extends FindOptions {
+  /**
+   * A list of the attributes from the join table that you want to select.
+   */
+  joinTableAttributes?: FindAttributeOptions
   /**
    * Apply a scope on the related model, or remove its default scope by passing false.
    */
